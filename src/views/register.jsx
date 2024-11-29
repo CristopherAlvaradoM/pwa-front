@@ -1,9 +1,8 @@
 import React from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { insertar } from "..";
 export default function Register() {
 
-    const navigate = useNavigate();
 
     /*const handleRedirect = () => {
         navigate('/home');
