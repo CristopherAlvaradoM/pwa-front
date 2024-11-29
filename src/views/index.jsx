@@ -10,7 +10,7 @@ import useImages from "../hooks/gubblegumFetch";
 export default function Index() {
     const [isOpen, setIsOpen] = useState(false);
     const { user, logout } = useAuth();
-    const { images, loading, error } = useImages('http://localhost:4000/api/images/get-images');
+    const { images, loading, error } = useImages('https://pwa-back-production.up.railway.app/api/images/get-images');
     if(loading) return (
         <p>cargndo</p>
     )

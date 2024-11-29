@@ -45,7 +45,7 @@ if (user && 'serviceWorker' in navigator && 'PushManager' in window) {
               console.log('Suscripción creada:', subscription);
 
               // Enviar la suscripción al servidor
-              const response = await fetch('http://localhost:4000/api/suscripciones/subscribe', {
+              const response = await fetch('https://pwa-back-production.up.railway.app/api/suscripciones/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -107,7 +107,7 @@ export function login(event) {
     password: password,
   };
 
-  fetch('http://localhost:4000/api/users/login', {
+  fetch('https://pwa-back-production.up.railway.app/api/users/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ export function insertar(event) {
     password: password,
   };
 
-  fetch('http://localhost:4000/api/users/create-user', {
+  fetch('https://pwa-back-production.up.railway.app/api/users/create-user', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
