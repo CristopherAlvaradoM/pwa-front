@@ -15,7 +15,7 @@ root.render(
   </React.StrictMode>
 );
 
-const VAPID_PUBLIC_KEY = 'BNyHwQF_6yj6Iko4XWppzl4PFDc6fvb-cNm243Der9dhJct5Wv3JDezNYUOsCwdljvf6i4jehq_Yiou84QYGtLk';
+const VAPID_PUBLIC_KEY = 'BHQn4a3AtgiLoP_gh20y3wryOTXwvBXOVPnHAxtWp7Ci5FkmM-r1He4YJHV5LTbaRDsWlYv_yzwWprcpkPe5kGU';
 
 // Verificar si el usuario está logueado
 const user = JSON.parse(sessionStorage.getItem('user'));
@@ -45,7 +45,7 @@ if (user && 'serviceWorker' in navigator && 'PushManager' in window) {
               console.log('Suscripción creada:', subscription);
 
               // Enviar la suscripción al servidor
-              const response = await fetch('https://symphony-server.onrender.com/api/suscripciones/subscribe', {
+              const response = await fetch('http://localhost:4000/api/suscripciones/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -107,7 +107,7 @@ export function login(event) {
     password: password,
   };
 
-  fetch('https://symphony-server.onrender.com/api/users/login', {
+  fetch('http://localhost:4000/api/users/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ export function insertar(event) {
     password: password,
   };
 
-  fetch('https://symphony-server.onrender.com/api/users/create-user', {
+  fetch('http://localhost:4000/api/users/create-user', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'

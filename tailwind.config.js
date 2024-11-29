@@ -6,10 +6,12 @@ module.exports = {
   theme: {
     extend: {
       colors:{
-        primary: "#fff0f8",
-        secondary: "#EF2A8B",
-        complementary: "#DA2C9F",
-        dark_complementary: "#7c0353",
+        primary: "#2E073F",
+        secondary: "#7A1CAC",
+        complementary: "#AD49E1",
+        dark_complementary: "#7A1CAC",
+        contrastPrimary: "#EBD3F8 ",
+        textColor: "#2E073F",
       }
     },
   },

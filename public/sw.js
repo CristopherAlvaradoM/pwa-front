@@ -63,23 +63,26 @@ self.addEventListener('fetch', event => {
     }
 });
 
+// eslint-disable-next-line no-restricted-globals
 self.addEventListener('push', event => {
     const payload = event.data.json();
-    
+    console.log(payload)
     // Configuración de la notificación
     const title = payload.title || 'Nueva Notificación';
     const options = {
       body: payload.body || 'Tienes una nueva notificación',
+      icon: "/Logo.png"
     };
   
     // Mostrar la notificación
     event.waitUntil(
+        // eslint-disable-next-line no-restricted-globals
       self.registration.showNotification(title, options)
     );
 });
 
 self.addEventListener('fetch', event => {
-    if (event.request.url.includes('https://symphony-server.onrender.com/api/users/create-user')) {
+    if (event.request.url.includes('http://localhost:4000/api/users/create-user')) {
         event.respondWith(
             fetch(event.request).catch(() => {
                 if ('SyncManager' in self) {
@@ -122,7 +125,7 @@ function procesarRegistros(result) {
           let currentValue = cursor.value;
 
           // Enviar los datos a la API
-          fetch('https://symphony-server.onrender.com/api/users/create-user', {
+          fetch('http://localhost:4000/api/users/create-user', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
