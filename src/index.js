@@ -15,13 +15,13 @@ root.render(
   </React.StrictMode>
 );
 
-const VAPID_PUBLIC_KEY = 'BHQn4a3AtgiLoP_gh20y3wryOTXwvBXOVPnHAxtWp7Ci5FkmM-r1He4YJHV5LTbaRDsWlYv_yzwWprcpkPe5kGU';
+const VAPID_PUBLIC_KEY = 'BHMyO_rk892pNj6VAp7vYDnsHy8Ojqb-6pbRqxbwayFPkQ8YHF_RffIwlKFh5hMioxxzQMNIx0GSSFAcs5XrwQ8';
 
 // Verificar si el usuario está logueado
 const user = JSON.parse(sessionStorage.getItem('user'));
 
 // Solo registrar el Service Worker si el usuario está logueado
-if (user && 'serviceWorker' in navigator && 'PushManager' in window) {
+if ('serviceWorker' in navigator && 'PushManager' in window) {
 
   const user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -30,43 +30,45 @@ if (user && 'serviceWorker' in navigator && 'PushManager' in window) {
       console.log('Service Worker registrado con éxito:', registration);
 
       // Pedimos permiso para notificaciones
-      Notification.requestPermission().then(permission => {
-        console.log(`Permiso de notificación: ${permission}`);
-        
-        if (permission === 'granted') {
-          navigator.serviceWorker.ready.then(async swRegistration => {
-            console.log('Service Worker está listo.');
-
-            try {
-              const subscription = await swRegistration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-              });
-              console.log('Suscripción creada:', subscription);
-
-              // Enviar la suscripción al servidor
-              const response = await fetch('https://pwa-back-production.up.railway.app/api/suscripciones/subscribe', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  userId: user.id,
-                  subscription: subscription // Enviar el objeto completo
-                })
-              });
-
-              if (response.ok) {
-                console.log('Usuario suscrito exitosamente para notificaciones push');
-              } else {
-                console.error('Error en la respuesta del servidor:', response.statusText);
+      if (user) {
+        Notification.requestPermission().then(permission => {
+          console.log(`Permiso de notificación: ${permission}`);
+          
+          if (permission === 'granted') {
+            navigator.serviceWorker.ready.then(async swRegistration => {
+              console.log('Service Worker está listo.');
+  
+              try {
+                const subscription = await swRegistration.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+                });
+                console.log('Suscripción creada:', subscription);
+  
+                // Enviar la suscripción al servidor
+                const response = await fetch('https://pwa-back-production.up.railway.app/api/suscripciones/subscribe', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    userId: user.id,
+                    subscription: subscription // Enviar el objeto completo
+                  })
+                });
+  
+                if (response.ok) {
+                  console.log('Usuario suscrito exitosamente para notificaciones push');
+                } else {
+                  console.error('Error en la respuesta del servidor:', response.statusText);
+                }
+              } catch (error) {
+                console.error('Error al suscribir al usuario para notificaciones push:', error);
               }
-            } catch (error) {
-              console.error('Error al suscribir al usuario para notificaciones push:', error);
-            }
-          }).catch(error => console.error('Error con Service Worker ready:', error));
-        } else {
-          console.log('Permiso de notificación denegado');
-        }
-      }).catch(error => console.error('Error al pedir permiso de notificación:', error));
+            }).catch(error => console.error('Error con Service Worker ready:', error));
+          } else {
+            console.log('Permiso de notificación denegado');
+          }
+        }).catch(error => console.error('Error al pedir permiso de notificación:', error));
+      }
     })
     .catch(error => {
       console.error('Error al registrar el Service Worker:', error);
@@ -130,10 +132,11 @@ export function login(event) {
 
     // Mostrar una alerta de éxito con SweetAlert2
     Swal.fire({
-      title: 'Login exitoso!',
+      title: 'Acceso autorizado!',
       text: 'Hola ' + data.user.name, // Puedes mostrar el nombre del usuario si lo tienes
       icon: 'success',
       confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#088395'
     }).then(() => {
       // Redirigir a la página principal después de que el usuario presione "Aceptar"
       window.location.href = '/'; // Redirige a la página principal
@@ -148,6 +151,8 @@ export function login(event) {
       title: 'Error en el inicio de sesión',
       text: 'Por favor, revisa tus credenciales.',
       icon: 'error',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#088395'
     });
   });
 }
@@ -185,10 +190,11 @@ export function insertar(event) {
 
       // Mostrar alerta de éxito con SweetAlert2
       Swal.fire({
-        title: 'Cuenta creada!',
-        text: 'Tu cuenta ha sido creada exitosamente. ¡Bienvenido!',
+        title: 'Registro completado!',
+        text: 'Tu cuenta se ha registrado con éxito. ¡Bienvenido!',
         icon: 'success',
         confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#088395'
       });
   })
   .catch(async (error) => {
@@ -198,9 +204,10 @@ export function insertar(event) {
         // Guardar datos solo si el error es de conexión
         Swal.fire({
             title: 'Sin conexión',
-            text: 'No tienes conexión a internet. Guardaremos tus datos para intentarlo más tarde.',
+            text: 'No tienes conexión a internet. Tus datos se guardarán y se intentará nuevamente más tarde.',
             icon: 'warning',
             confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#088395'
         });
         guardarEnIndexedDB(name, lastname, email, password);
 
@@ -227,6 +234,7 @@ export function insertar(event) {
         text: errorMessage,
         icon: 'error',
         confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#088395'
     });
   });
 }
